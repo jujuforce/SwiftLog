@@ -45,6 +45,9 @@ open class Log {
     ///Whether or not logging also prints to the console
     open var printToConsole = true
     
+    ///Whether or not logging also prints to the console
+    open var shouldAppendDate = true
+    
     ///logging singleton
     open class var logger: Log {
         
@@ -53,6 +56,10 @@ open class Log {
         }
         return Static.instance
     }
+    
+    ///Init
+    public required init() {}
+    
     //the date formatter
     var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
@@ -73,7 +80,7 @@ open class Log {
         }
         if let fileHandle = FileHandle(forWritingAtPath: path) {
             let dateStr = dateFormatter.string(from: Date())
-            let writeText = "[\(dateStr)]: \(text)\n"
+            let writeText = self.shouldAppendDate ? "[\(dateStr)]: \(text)\n" : "\(text)\n"
             fileHandle.seekToEndOfFile()
             fileHandle.write(writeText.data(using: String.Encoding.utf8)!)
             fileHandle.closeFile()
